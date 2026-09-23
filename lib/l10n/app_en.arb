@@ -1,0 +1,56 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Vocabridge",
+  "conversationTitle": "Conversation",
+
+  "tabKeyboard": "Keyboard",
+  "tabSymbols": "Symbols",
+  "tabSign": "Sign",
+  "tabListen": "Listen",
+
+  "backToTab": "Back to {tab}",
+  "@backToTab": {
+    "placeholders": { "tab": { "type": "String" } }
+  },
+  "viewConversation": "View conversation",
+
+  "language": "Language",
+  "chooseLanguage": "Choose language",
+  "languageEnglish": "English",
+  "languageBengali": "Bengali",
+
+  "quickPhrases": "Quick phrases",
+  "tone": "Tone",
+  "noSymbolsYet": "No symbols in this category yet",
+  "noQuickPhrasesYet": "No quick phrases yet",
+  "typeHint": "Type what you want to say…",
+  "clear": "Clear",
+  "speak": "Speak",
+  "stopSpeaking": "Stop speaking",
+
+  "conversationEmpty": "Your conversation will appear here.",
+  "you": "You",
+  "them": "Them",
+
+  "theirWordsWillAppear": "Their words will appear here…",
+  "tapMicInstructions": "Tap the mic and hand the phone over, or let them speak toward it.",
+  "listening": "Listening…",
+
+  "signVideoNotBundled": "Sign video not bundled yet",
+  "addSignClipInstructions": "Add a clip to assets/sign_videos/ for this phrase.",
+  "pickPhraseToSign": "Pick a phrase below to see it signed",
+
+  "categoryQuick": "Quick",
+  "categoryNeeds": "Needs",
+  "categoryEmergency": "Emergency",
+  "categoryEmotions": "Emotions",
+  "categoryGeneral": "General",
+
+  "toneNeutral": "Neutral",
+  "toneHappy": "Happy",
+  "toneUrgent": "Urgent",
+  "toneSad": "Sad",
+  "toneQuestion": "Question",
+  "toneAngry": "Angry"
+}

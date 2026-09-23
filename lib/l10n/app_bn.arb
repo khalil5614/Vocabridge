@@ -1,0 +1,53 @@
+{
+  "@@locale": "bn",
+
+  "appTitle": "ভোকাব্রিজ",
+  "conversationTitle": "কথোপকথন",
+
+  "tabKeyboard": "কীবোর্ড",
+  "tabSymbols": "প্রতীক",
+  "tabSign": "সাংকেতিক ভাষা",
+  "tabListen": "শুনুন",
+
+  "backToTab": "{tab}-এ ফিরে যান",
+  "viewConversation": "কথোপকথন দেখুন",
+
+  "language": "ভাষা",
+  "chooseLanguage": "ভাষা নির্বাচন করুন",
+  "languageEnglish": "ইংরেজি",
+  "languageBengali": "বাংলা",
+
+  "quickPhrases": "দ্রুত বাক্যাংশ",
+  "tone": "সুর",
+  "noSymbolsYet": "এই বিভাগে এখনও কোনো প্রতীক নেই",
+  "noQuickPhrasesYet": "এখনও কোনো দ্রুত বাক্যাংশ নেই",
+  "typeHint": "আপনি যা বলতে চান তা লিখুন…",
+  "clear": "মুছুন",
+  "speak": "বলুন",
+  "stopSpeaking": "বলা বন্ধ করুন",
+
+  "conversationEmpty": "আপনার কথোপকথন এখানে দেখা যাবে।",
+  "you": "আপনি",
+  "them": "তারা",
+
+  "theirWordsWillAppear": "তাদের কথা এখানে দেখা যাবে…",
+  "tapMicInstructions": "মাইক্রোফোনে ট্যাপ করে ফোনটি তাদের দিন, অথবা তাদের ফোনের দিকে কথা বলতে দিন।",
+  "listening": "শোনা হচ্ছে…",
+
+  "signVideoNotBundled": "সাংকেতিক ভাষার ভিডিও এখনও যুক্ত করা হয়নি",
+  "addSignClipInstructions": "এই বাক্যাংশের জন্য assets/sign_videos/ ফোল্ডারে একটি ভিডিও যোগ করুন।",
+  "pickPhraseToSign": "সাংকেতিক ভাষায় দেখতে নিচে থেকে একটি বাক্যাংশ বেছে নিন",
+
+  "categoryQuick": "দ্রুত",
+  "categoryNeeds": "প্রয়োজন",
+  "categoryEmergency": "জরুরি",
+  "categoryEmotions": "অনুভূতি",
+  "categoryGeneral": "সাধারণ",
+
+  "toneNeutral": "স্বাভাবিক",
+  "toneHappy": "খুশি",
+  "toneUrgent": "জরুরি",
+  "toneSad": "দুঃখিত",
+  "toneQuestion": "প্রশ্ন",
+  "toneAngry": "রাগান্বিত"
+}
