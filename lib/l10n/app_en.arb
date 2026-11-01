@@ -46,6 +46,11 @@
   "categoryEmergency": "Emergency",
   "categoryEmotions": "Emotions",
   "categoryGeneral": "General",
+  "categoryFamily": "Family",
+  "categoryWork": "Work",
+  "categoryWeather": "Weather",
+  "categoryMoney": "Money",
+  "categoryTech": "Technology",
 
   "toneNeutral": "Neutral",
   "toneHappy": "Happy",

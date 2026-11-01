@@ -43,6 +43,11 @@
   "categoryEmergency": "জরুরি",
   "categoryEmotions": "অনুভূতি",
   "categoryGeneral": "সাধারণ",
+  "categoryFamily": "পরিবার",
+  "categoryWork": "কাজ",
+  "categoryWeather": "আবহাওয়া",
+  "categoryMoney": "অর্থ",
+  "categoryTech": "প্রযুক্তি",
 
   "toneNeutral": "স্বাভাবিক",
   "toneHappy": "খুশি",

@@ -74,6 +74,7 @@ flutter:
   # depends on a network connection — this app must keep working offline.
   assets:
     - assets/google_fonts/
+    - assets/sign_videos/
 
   # Atkinson Hyperlegible (used via google_fonts above) has no Bengali
   # glyphs, so Bengali text needs its own bundled face — otherwise it

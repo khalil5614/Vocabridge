@@ -302,6 +302,36 @@ abstract class AppLocalizations {
   /// **'General'**
   String get categoryGeneral;
 
+  /// No description provided for @categoryFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get categoryFamily;
+
+  /// No description provided for @categoryWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get categoryWork;
+
+  /// No description provided for @categoryWeather.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather'**
+  String get categoryWeather;
+
+  /// No description provided for @categoryMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Money'**
+  String get categoryMoney;
+
+  /// No description provided for @categoryTech.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get categoryTech;
+
   /// No description provided for @toneNeutral.
   ///
   /// In en, this message translates to:
