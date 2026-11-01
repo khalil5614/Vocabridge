@@ -115,6 +115,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryGeneral => 'General';
 
   @override
+  String get categoryAll => 'All';
+
+  @override
   String get categoryFamily => 'Family';
 
   @override

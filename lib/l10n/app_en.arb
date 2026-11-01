@@ -46,6 +46,7 @@
   "categoryEmergency": "Emergency",
   "categoryEmotions": "Emotions",
   "categoryGeneral": "General",
+  "categoryAll": "All",
   "categoryFamily": "Family",
   "categoryWork": "Work",
   "categoryWeather": "Weather",

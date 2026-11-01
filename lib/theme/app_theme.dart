@@ -40,10 +40,16 @@ class ToneColors {
 /// instantly recognizable by color as well as label/icon.
 class CategoryColors {
   static const Map<String, Color> _base = {
+    'all': Color(0xFF0D9488),
     'quick': Color(0xFFCA8A04),
     'needs': Color(0xFF0D9488),
     'emergency': Color(0xFFDC2626),
     'emotions': Color(0xFF9333EA),
+    'family': Color(0xFF2563EB),
+    'work': Color(0xFF4F46E5),
+    'weather': Color(0xFF0284C7),
+    'money': Color(0xFF16A34A),
+    'tech': Color(0xFF9333EA),
     'general': Color(0xFF64748B),
   };
 

@@ -41,6 +41,34 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _thread.insert(0, m));
   }
 
+  void _showSetNameDialog(BuildContext context) {
+    final controller = TextEditingController(text: widget.storage.getUserName());
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Set Your Name'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'Enter your name...'),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () async {
+              await widget.storage.setUserName(controller.text.trim());
+              if (context.mounted) Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -103,6 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(l10n.languageBengali),
               ),
             ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.person_outline_rounded),
+            tooltip: 'Set Name',
+            onPressed: () => _showSetNameDialog(context),
           ),
           IconButton(
             icon: Icon(_showThread ? Icons.keyboard_alt_outlined : Icons.forum_outlined),

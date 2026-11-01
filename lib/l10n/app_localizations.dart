@@ -302,6 +302,12 @@ abstract class AppLocalizations {
   /// **'General'**
   String get categoryGeneral;
 
+  /// No description provided for @categoryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get categoryAll;
+
   /// No description provided for @categoryFamily.
   ///
   /// In en, this message translates to:

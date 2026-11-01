@@ -69,11 +69,12 @@ class _KeyboardScreenState extends State<KeyboardScreen> {
   }
 
   void _speakQuickPhrase(Phrase phrase) async {
-    await widget.tts.speak(phrase.text, tone: _tone);
+    final text = await widget.storage.resolvePhraseText(context, phrase);
+    await widget.tts.speak(text, tone: _tone);
     await widget.storage.incrementUse(phrase.id);
     widget.onMessageSpoken(Message(
       id: _uuid.v4(),
-      text: phrase.text,
+      text: text,
       sender: MessageSender.user,
       timestamp: DateTime.now(),
       tone: _tone,

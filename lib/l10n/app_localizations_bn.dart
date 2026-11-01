@@ -116,6 +116,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get categoryGeneral => 'সাধারণ';
 
   @override
+  String get categoryAll => 'সব';
+
+  @override
   String get categoryFamily => 'পরিবার';
 
   @override

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../data/default_phrases.dart';
 import '../models/message.dart';
@@ -35,6 +36,54 @@ class StorageService {
   Future<void> setLanguageCode(String code) async {
     await _settings.put('language', code);
     await _retranslateDefaultPhrases(code);
+  }
+
+  // ---- User Profile / Name ----
+
+  String getUserName() => _settings.get('user_name', defaultValue: '') as String;
+
+  Future<void> setUserName(String name) async {
+    await _settings.put('user_name', name);
+  }
+
+  Future<String> resolvePhraseText(BuildContext context, Phrase phrase) async {
+    if (phrase.id == 'p47') {
+      var name = getUserName();
+      if (name.isEmpty) {
+        name = await showDialog<String>(
+              context: context,
+              builder: (context) {
+                final controller = TextEditingController();
+                return AlertDialog(
+                  title: const Text('Set Your Name'),
+                  content: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(hintText: 'Enter your name...'),
+                    autofocus: true,
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    FilledButton(
+                      onPressed: () => Navigator.pop(context, controller.text.trim()),
+                      child: const Text('Save'),
+                    ),
+                  ],
+                );
+              },
+            ) ?? '';
+        if (name.isNotEmpty) {
+          await setUserName(name);
+        }
+      }
+      if (name.isNotEmpty) {
+        final base = phrase.text.replaceAll(RegExp(r'\.+$'), '').trim();
+        return '$base $name';
+      }
+    }
+    return phrase.text;
   }
 
   /// The seeded default phrases (ids p1-p14) are re-seeded in [languageCode],

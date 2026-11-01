@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import '../l10n/app_localizations.dart';
 import '../models/message.dart';
@@ -11,18 +12,30 @@ import '../theme/app_theme.dart';
 /// free to use for AAC apps) before shipping — Material icons are a
 /// functional placeholder, not final symbol design.
 const Map<String, IconData> _categoryIcons = {
+  'all': Icons.apps_rounded,
   'quick': Icons.flash_on_rounded,
   'needs': Icons.favorite_rounded,
   'emergency': Icons.warning_amber_rounded,
   'emotions': Icons.mood_rounded,
+  'family': Icons.family_restroom_rounded,
+  'work': Icons.work_rounded,
+  'weather': Icons.wb_sunny_rounded,
+  'money': Icons.attach_money_rounded,
+  'tech': Icons.devices_rounded,
   'general': Icons.chat_bubble_outline_rounded,
 };
 
 String _categoryLabel(AppLocalizations l10n, String category) => switch (category) {
+      'all' => l10n.categoryAll,
       'quick' => l10n.categoryQuick,
       'needs' => l10n.categoryNeeds,
       'emergency' => l10n.categoryEmergency,
       'emotions' => l10n.categoryEmotions,
+      'family' => l10n.categoryFamily,
+      'work' => l10n.categoryWork,
+      'weather' => l10n.categoryWeather,
+      'money' => l10n.categoryMoney,
+      'tech' => l10n.categoryTech,
       _ => l10n.categoryGeneral,
     };
 
@@ -44,29 +57,71 @@ class SymbolScreen extends StatefulWidget {
 
 class _SymbolScreenState extends State<SymbolScreen> {
   final _uuid = const Uuid();
-  String _category = 'needs';
+  String _category = 'all';
+  String _searchQuery = '';
+  final _searchController = TextEditingController();
 
   void _speakSymbol(Phrase phrase) async {
-    await widget.tts.speak(phrase.text);
+    HapticFeedback.mediumImpact();
+    final text = await widget.storage.resolvePhraseText(context, phrase);
+    await widget.tts.speak(text);
     await widget.storage.incrementUse(phrase.id);
     widget.onMessageSpoken(Message(
       id: _uuid.v4(),
-      text: phrase.text,
+      text: text,
       sender: MessageSender.user,
       timestamp: DateTime.now(),
     ));
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final categories = ['needs', 'emergency', 'emotions', 'quick'];
-    final phrases = widget.storage.getPhrases(category: _category);
-    final activeColor = CategoryColors.of(_category);
+    final categories = ['all', 'needs', 'emergency', 'emotions', 'quick', 'family', 'work', 'weather', 'money', 'tech'];
+    final candidatePhrases = _searchQuery.isNotEmpty
+        ? widget.storage.getPhrases()
+        : (_category == 'all'
+            ? widget.storage.getPhrases()
+            : widget.storage.getPhrases(category: _category));
+    final phrases = _searchQuery.isEmpty
+        ? candidatePhrases
+        : candidatePhrases.where((p) => p.text.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+    final activeColor = _category == 'all' ? theme.colorScheme.primary : CategoryColors.of(_category);
 
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, 0),
+          child: TextField(
+            controller: _searchController,
+            onChanged: (val) => setState(() => _searchQuery = val),
+            decoration: InputDecoration(
+              hintText: 'Search phrases...',
+              prefixIcon: const Icon(Icons.search_rounded),
+              suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear_rounded),
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() => _searchQuery = '');
+                      },
+                    )
+                  : null,
+              isDense: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
+              ),
+            ),
+          ),
+        ),
         SizedBox(
           height: 60,
           child: ListView.separated(
@@ -81,7 +136,7 @@ class _SymbolScreenState extends State<SymbolScreen> {
               return ChoiceChip(
                 label: Text(_categoryLabel(l10n, cat)),
                 avatar: Icon(
-                  _categoryIcons[cat],
+                  _categoryIcons[cat] ?? Icons.chat_bubble_outline_rounded,
                   size: 18,
                   color: selected ? color : color.withValues(alpha: 0.7),
                 ),
@@ -120,8 +175,10 @@ class _SymbolScreenState extends State<SymbolScreen> {
                   itemCount: phrases.length,
                   itemBuilder: (context, index) {
                     final phrase = phrases[index];
+                    final itemColor = CategoryColors.of(phrase.category);
+                    final itemIcon = _categoryIcons[phrase.category] ?? Icons.chat_bubble_outline_rounded;
                     return Material(
-                      color: activeColor.withValues(alpha: 0.10),
+                      color: itemColor.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(AppRadius.lg),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -129,7 +186,7 @@ class _SymbolScreenState extends State<SymbolScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(AppRadius.lg),
-                            border: Border.all(color: activeColor.withValues(alpha: 0.28)),
+                            border: Border.all(color: itemColor.withValues(alpha: 0.28)),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -138,10 +195,10 @@ class _SymbolScreenState extends State<SymbolScreen> {
                                 width: 48,
                                 height: 48,
                                 decoration: BoxDecoration(
-                                  color: activeColor.withValues(alpha: 0.16),
+                                  color: itemColor.withValues(alpha: 0.16),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(_categoryIcons[_category], size: 26, color: activeColor),
+                                child: Icon(itemIcon, size: 26, color: itemColor),
                               ),
                               const SizedBox(height: 10),
                               Padding(

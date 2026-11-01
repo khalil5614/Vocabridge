@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import '../l10n/app_localizations.dart';
 import '../services/storage_service.dart';
@@ -27,8 +28,11 @@ class _SignScreenState extends State<SignScreen> {
   String? _activePhraseId;
   bool _videoMissing = false;
   bool _loading = false;
+  String _searchQuery = '';
+  final _searchController = TextEditingController();
 
   Future<void> _playSign(String phraseId) async {
+    HapticFeedback.mediumImpact();
     await _controller?.dispose();
     setState(() {
       _activePhraseId = phraseId;
@@ -58,6 +62,7 @@ class _SignScreenState extends State<SignScreen> {
   @override
   void dispose() {
     _controller?.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -116,45 +121,85 @@ class _SignScreenState extends State<SignScreen> {
         ),
         Expanded(
           flex: 2,
-          child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.lg),
-            itemCount: phrases.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 6),
-            itemBuilder: (context, index) {
-              final phrase = phrases[index];
-              final active = phrase.id == _activePhraseId;
-              return Material(
-                color: active
-                    ? theme.colorScheme.primaryContainer
-                    : theme.colorScheme.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                  onTap: () => _playSign(phrase.id),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            phrase.text,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        Icon(
-                          active ? Icons.play_circle_fill_rounded : Icons.sign_language_rounded,
-                          color: active
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ],
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.sm),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (val) => setState(() => _searchQuery = val),
+                  decoration: InputDecoration(
+                    hintText: 'Search sign phrases...',
+                    prefixIcon: const Icon(Icons.search_rounded),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear_rounded),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _searchQuery = '');
+                            },
+                          )
+                        : null,
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
                     ),
                   ),
                 ),
-              );
-            },
+              ),
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    final allPhrases = widget.storage.getPhrases();
+                    final phrases = _searchQuery.isEmpty
+                        ? allPhrases
+                        : allPhrases.where((p) => p.text.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+
+                    return ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.lg),
+                      itemCount: phrases.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 6),
+                      itemBuilder: (context, index) {
+                        final phrase = phrases[index];
+                        final active = phrase.id == _activePhraseId;
+                        return Material(
+                          color: active
+                              ? theme.colorScheme.primaryContainer
+                              : theme.colorScheme.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(AppRadius.sm),
+                            onTap: () => _playSign(phrase.id),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      phrase.text,
+                                      style: theme.textTheme.bodyLarge?.copyWith(
+                                        fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    active ? Icons.play_circle_fill_rounded : Icons.sign_language_rounded,
+                                    color: active
+                                        ? theme.colorScheme.primary
+                                        : theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ],
