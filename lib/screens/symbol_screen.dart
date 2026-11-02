@@ -183,11 +183,84 @@ class _SymbolScreenState extends State<SymbolScreen> {
     super.dispose();
   }
 
+  void _showAddPhraseDialog() {
+    final textController = TextEditingController();
+    String selectedCategory = _category == 'all' ? 'needs' : _category;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final categories = ['needs', 'emergency', 'emotions', 'quick', 'family', 'work', 'weather', 'money', 'tech', 'general'];
+            return AlertDialog(
+              title: const Text('Add Custom Phrase'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextField(
+                      controller: textController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter phrase text...',
+                      ),
+                      autofocus: true,
+                      maxLines: 2,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('Select Category:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: categories.map((cat) {
+                        final selected = cat == selectedCategory;
+                        return ChoiceChip(
+                          label: Text(_categoryLabel(AppLocalizations.of(context)!, cat)),
+                          selected: selected,
+                          onSelected: (_) => setDialogState(() => selectedCategory = cat),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                FilledButton(
+                  onPressed: () async {
+                    final text = textController.text.trim();
+                    if (text.isEmpty) return;
+                    final newPhrase = Phrase(
+                      id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
+                      text: text,
+                      category: selectedCategory,
+                    );
+                    await widget.storage.savePhrase(newPhrase);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                      setState(() {});
+                    }
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final categories = ['all', 'needs', 'emergency', 'emotions', 'quick', 'family', 'work', 'weather', 'money', 'tech'];
+    final categories = ['all', 'needs', 'emergency', 'emotions', 'quick', 'family', 'work', 'weather', 'money', 'tech', 'general'];
     final candidatePhrases = _searchQuery.isNotEmpty
         ? widget.storage.getPhrases()
         : (_category == 'all'
@@ -202,27 +275,42 @@ class _SymbolScreenState extends State<SymbolScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, 0),
-          child: TextField(
-            controller: _searchController,
-            onChanged: (val) => setState(() => _searchQuery = val),
-            decoration: InputDecoration(
-              hintText: 'Search phrases...',
-              prefixIcon: const Icon(Icons.search_rounded),
-              suffixIcon: _searchQuery.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear_rounded),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() => _searchQuery = '');
-                      },
-                    )
-                  : null,
-              isDense: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (val) => setState(() => _searchQuery = val),
+                  decoration: InputDecoration(
+                    hintText: 'Search phrases...',
+                    prefixIcon: const Icon(Icons.search_rounded),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear_rounded),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _searchQuery = '');
+                            },
+                          )
+                        : null,
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
+                    ),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: 8),
+              FilledButton.icon(
+                onPressed: _showAddPhraseDialog,
+                icon: const Icon(Icons.add_rounded, size: 18),
+                label: const Text('Add'),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(
