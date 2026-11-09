@@ -99,14 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               width: 34,
               height: 34,
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(
-                Icons.record_voice_over_rounded,
-                color: theme.colorScheme.onPrimary,
-                size: 20,
+              child: Image.asset(
+                'assets/logo_voca.png',
+                fit: BoxFit.cover,
               ),
             ),
             const SizedBox(width: 10),

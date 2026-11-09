@@ -75,6 +75,7 @@ flutter:
   assets:
     - assets/google_fonts/
     - assets/sign_videos/
+    - assets/logo_voca.png
 
   # Atkinson Hyperlegible (used via google_fonts above) has no Bengali
   # glyphs, so Bengali text needs its own bundled face — otherwise it
