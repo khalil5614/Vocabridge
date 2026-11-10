@@ -8,7 +8,7 @@ import '../services/storage_service.dart';
 import '../widgets/conversation_thread.dart';
 import 'keyboard_screen.dart';
 import 'symbol_screen.dart';
-import 'sign_screen.dart';
+//import 'sign_screen.dart';
 import 'listen_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -79,11 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final tabTitles = [l10n.tabKeyboard, l10n.tabSymbols, l10n.tabSign, l10n.tabListen];
+    //final tabTitles = [l10n.tabKeyboard, l10n.tabSymbols, l10n.tabSign, l10n.tabListen];
+    final tabTitles = [l10n.tabKeyboard, l10n.tabSymbols, l10n.tabListen];
     final screens = [
       KeyboardScreen(tts: widget.tts, storage: widget.storage, onMessageSpoken: _addMessage),
       SymbolScreen(tts: widget.tts, storage: widget.storage, onMessageSpoken: _addMessage),
-      SignScreen(storage: widget.storage),
+      //SignScreen(storage: widget.storage),
       ListenScreen(
         stt: widget.stt,
         onMessageReceived: _addMessage,
@@ -172,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedIcon: const Icon(Icons.grid_view),
             label: tabTitles[1],
           ),
-          NavigationDestination(
+          /*NavigationDestination(
             icon: const Icon(Icons.sign_language_outlined),
             selectedIcon: const Icon(Icons.sign_language),
             label: tabTitles[2],
@@ -181,6 +182,11 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.hearing_outlined),
             selectedIcon: const Icon(Icons.hearing),
             label: tabTitles[3],
+          ),*/
+          NavigationDestination(
+            icon: const Icon(Icons.hearing_outlined),
+            selectedIcon: const Icon(Icons.hearing),
+            label: tabTitles[2],
           ),
         ],
       ),
